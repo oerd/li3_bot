@@ -8,6 +8,7 @@
 	<?php echo $this->html->link('Icon', null, array('type' => 'icon')); ?>
 </head>
 <body class="bot">
+<div id="wrapper">
 	<div id="container">
 		<div id="header">
 			<h1>Lithium Bot</h1>
