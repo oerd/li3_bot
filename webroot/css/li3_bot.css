@@ -35,6 +35,10 @@ table.messages {
 	width: 80%;
 }
 
+.crumbs {
+	margin-top: 1.5em;
+}
+
 ul.channels {
 	padding: 0;
 	list-style: none;
