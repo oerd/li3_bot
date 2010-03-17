@@ -21,6 +21,7 @@ use \lithium\g11n\Locale;
 </head>
 <body class="bot">
 <div id="wrapper">
+	<?=$this->_view->render(array('element' => 'locale_navigation')); ?>
 	<div id="container">
 		<div id="header">
 			<h1>Lithium</h1>
