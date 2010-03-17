@@ -6,10 +6,6 @@
  * @license       http://opensource.org/licenses/bsd-license.php The BSD License
  */
 
-use \lithium\core\Environment;
-
-$locale = Environment::get('locale');
-
 ?>
 <?php if (empty($logs)): ?>
 <?php $this->title('Channels'); ?>
@@ -18,7 +14,6 @@ $locale = Environment::get('locale');
 		  <li><?=$this->html->link('#' . $channel, array(
 				'plugin' => 'li3_bot',
 				'controller' => 'logs', 'action' => 'index',
-				'locale' => $locale,
 				'args' => array($channel)
 				)); ?></li>
 	<?php endforeach;?>
@@ -31,7 +26,6 @@ $locale = Environment::get('locale');
 		<?php echo $this->html->link($date, array(
 			'plugin' => 'li3_bot',
 			'controller' => 'logs', 'action' => 'view',
-			'locale' => $locale,
 			'args' => array($channel, $date)
 		));?>
     </li>

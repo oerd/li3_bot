@@ -1,13 +1,20 @@
 <?php
 
 use \lithium\net\http\Router;
+use \app\extensions\net\http\LocaleRoute;
 
-Router::connect('/{:locale:[a-z]+[a-z]+}/bot/view/{:args}', array(
-	'plugin' => 'li3_bot', 'controller' => 'logs', 'action' => 'view', 'locale' => null
-));
-Router::connect('/{:locale:[a-z]+[a-z]+}/bot/{:args}', array(
-	'plugin' => 'li3_bot', 'controller' => 'logs', 'locale' => null
-));
+Router::connect(new LocaleRoute(array(
+	'template' => '/bot/view/{:args}',
+	'params' => array(
+		'plugin' => 'li3_bot',
+		'controller' => 'logs', 'action' => 'view'
+))));
 
+Router::connect(new LocaleRoute(array(
+	'template' => '/bot/{:args}',
+	'params' => array(
+		'plugin' => 'li3_bot',
+		'controller' => 'logs'
+))));
 
 ?>

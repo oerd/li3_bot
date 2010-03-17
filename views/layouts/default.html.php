@@ -27,11 +27,6 @@ use \lithium\g11n\Locale;
 			<h1><?= $t('Lithium Bot', array('scope' => 'li3_bot')); ?></h1>
 			<ul class="crumbs">
 			<?php foreach ($breadcrumbs as $crumb): ?>
-				<?php
-					if (is_array($crumb['url'])) {
-						$crumb['url']['locale'] = Environment::get('locale');
-					}
-				?>
 				<?php if ($crumb['url']): ?>
 					<li><?=$this->html->link($crumb['title'], $crumb['url']); ?></li>
 				<?php else: ?>
