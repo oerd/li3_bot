@@ -1,12 +1,6 @@
 <?php
 
 /**
- * Require the g11n if it has not been included yet.
- *
- */
-require_once LITHIUM_APP_PATH . '/config/bootstrap/g11n.php';
-
-/**
  * Register g11n resource.
  */
 use \lithium\g11n\Catalog;
