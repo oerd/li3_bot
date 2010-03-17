@@ -56,7 +56,9 @@ use \lithium\g11n\Locale;
 )); ?>
 <script type="text/javascript" charset="utf-8">
 	$(document).ready(function () {
-		RadCli.setup();
+		RadCli.setup({
+			commandBase: 'http://lithify.me/<?= Locale::language(Environment::get('locale')); ?>/cmd'
+		});
 	});
 </script>
 </body>
