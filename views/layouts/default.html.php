@@ -24,8 +24,7 @@ use \lithium\g11n\Locale;
 	<?=$this->_view->render(array('element' => 'locale_navigation')); ?>
 	<div id="container">
 		<div id="header">
-			<h1>Lithium</h1>
-			<h2><?= $t('Bot', array('scope' => 'li3_bot')); ?></h2>
+			<h1><?= $t('Lithium Bot', array('scope' => 'li3_bot')); ?></h1>
 			<ul class="crumbs">
 			<?php foreach ($breadcrumbs as $crumb): ?>
 				<?php
