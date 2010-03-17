@@ -47,7 +47,11 @@ use \lithium\g11n\Locale;
 	<div id="footer-spacer"></div>
 </div>
 <div id="footer">
-	<p class="copyright">Pretty much everything is &copy; 2009 and beyond, the Union of Rad</p>
+	<p class="copyright">
+		<?=$t('Pretty much everything is &copy; {:year} and beyond, the Union of Rad', array(
+			'year' => date('Y')
+		)); ?>
+	</p>
 </div>
 <?php echo $this->html->script(array(
 	'http://code.jquery.com/jquery-1.4.1.min.js',
