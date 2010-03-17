@@ -1,5 +1,5 @@
 <?php $this->title("Logs for {$channel} on {$date}"); ?>
-<table class="messages">
+<table class="messages" lang="en">
 <?php foreach ($log as $i => $line): ?>
 	<?php
 		$hash = abs(crc32($line['user']));

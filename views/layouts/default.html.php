@@ -1,8 +1,20 @@
+<?php
+/**
+ * Lithium: the most rad php framework
+ *
+ * @copyright     Copyright 2009, Union of Rad, Inc. (http://union-of-rad.org)
+ * @license       http://opensource.org/licenses/bsd-license.php The BSD License
+ */
+
+use \lithium\core\Environment;
+use \lithium\g11n\Locale;
+
+?>
 <!doctype html>
-<html>
+<html lang="<?= str_replace('_', '-', Environment::get('locale')); ?>">
 <head>
 	<?php echo $this->html->charset(); ?>
-	<title>Lithium Bot <?php echo $this->title(); ?></title>
+	<title><?=$t('Lithium Bot', array('scope' => 'li3_bot')) . ' ' . $this->title(); ?></title>
 	<?php echo $this->html->style(array('lithium', 'u1m', '/li3_bot/css/li3_bot')); ?>
 	<?php echo $this->scripts(); ?>
 	<?php echo $this->html->link('Icon', null, array('type' => 'icon')); ?>
@@ -11,10 +23,20 @@
 <div id="wrapper">
 	<div id="container">
 		<div id="header">
-			<h1>Lithium Bot</h1>
+			<h1>Lithium</h1>
+			<h2><?= $t('Bot', array('scope' => 'li3_bot')); ?></h2>
 			<ul class="crumbs">
-			<?php foreach ($breadcrumbs as $link => $title): ?>
-				  <li><?php echo ($link != '#') ? $this->html->link($title, $link) : $title; ?></li>
+			<?php foreach ($breadcrumbs as $crumb): ?>
+				<?php
+					if (is_array($crumb['url'])) {
+						$crumb['url']['locale'] = Environment::get('locale');
+					}
+				?>
+				<?php if ($crumb['url']): ?>
+					<li><?=$this->html->link($crumb['title'], $crumb['url']); ?></li>
+				<?php else: ?>
+					<li><?=$crumb['title']; ?></li>
+				<?php endif; ?>
 			<?php endforeach; ?>
 			</ul>
 		</div>

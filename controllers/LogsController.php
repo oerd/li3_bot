@@ -9,15 +9,25 @@
 namespace li3_bot\controllers;
 
 use \li3_bot\models\Log;
+use \lithium\g11n\Message;
 
 class LogsController extends \lithium\action\Controller {
+
 	public function index($channel = null) {
+		extract(Message::aliases());
+
 		$channels = Log::find('all');
-		$breadcrumbs = array('bot' => 'Channels');
+		$breadcrumbs[] = array(
+			'url' => array('plugin' => 'li3_bot', 'controller' => 'logs', 'action' => 'index'),
+			'title' => $t('Channels', array('scope' => 'li3_bot'))
+		);
 		$logs = null;
 
 		if ($channel) {
-			$breadcrumbs['#'] = '#'.$channel;
+			$breadcrumbs[] = array(
+				'url' => null,
+				'title' => "#{$channel}"
+			);
 			$logs = Log::find('all', compact('channel'));
 
 			natsort($logs);
@@ -28,13 +38,24 @@ class LogsController extends \lithium\action\Controller {
 	}
 
 	public function view($channel, $date = null) {
+		extract(Message::aliases());
+
 		if (is_null($date)) {
 			return $this->index($channel);
 		}
-		$breadcrumbs = array('bot' => 'Channels');
-		$breadcrumbs['bot/'.$channel] = '#'.$channel;
-		$breadcrumbs['#'] = $date;
 
+		$breadcrumbs[] = array(
+			'url' => array('plugin' => 'li3_bot', 'controller' => 'logs', 'action' => 'index'),
+			'title' => $t('Channels', array('scope' => 'li3_bot'))
+		);
+		$breadcrumbs[] = array(
+			'url' => array('plugin' => 'li3_bot', 'controller' => 'logs', 'action' => 'view', $channel),
+			'title' => "#{$channel}"
+		);
+		$breadcrumbs[] = array(
+			'url' => null,
+			'title' => $date
+		);
 		$channels = Log::find('all');
 		$log = Log::read($channel, $date);
 		$previous = date('Y-m-d', strtotime($date) - (60 * 60 * 24));
