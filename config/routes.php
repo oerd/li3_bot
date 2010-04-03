@@ -1,7 +1,7 @@
 <?php
 
 use \lithium\net\http\Router;
-use \li3_bot\extensions\route\Locale;
+use \app\extensions\route\Locale;
 
 Router::connect(new Locale(array(
 	'template' => '/bot/view/{:args}',
