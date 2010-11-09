@@ -6,7 +6,9 @@
 -------------------------------------------------------------------------------------------------*/
 
 /*--- This is the stylesheet for li3_bot ---*/
-
+#container {
+	padding: 60px 20px;
+}
 #content {
 	margin-top: 2em;
 }
