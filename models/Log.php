@@ -8,7 +8,8 @@
 
 namespace li3_bot\models;
 
-use \DirectoryIterator;
+use DirectoryIterator;
+use Exception;
 
 class Log extends \lithium\core\StaticObject {
 
@@ -17,25 +18,31 @@ class Log extends \lithium\core\StaticObject {
 	protected static $_pattern = null;
 
 	public static function __init() {
-		static::$path = LITHIUM_APP_PATH . '/resources/bot/logs';
+		static::$path = $path = LITHIUM_APP_PATH . '/resources/bot/logs';
 		static::$_pattern = '/^(?P<time>\d+:\d+(:\d+)?) : (?P<user>[^\s]+) : (?P<message>.*)/';
+
+		if (!is_dir($path)) {
+			throw new Exception("Logs directory at `{$path}` doesn't exist");
+		}
+		if (!is_readable($path)) {
+			throw new Exception("Logs directory at `{$path}` is not readable");
+		}
+		if (!is_writable($path)) {
+			throw new Exception("Logs directory at `{$path}` is not writable");
+		}
 	}
 
 	public static function save($data = null) {
 		$dir = static::path($data['channel']);
 		$path = static::path($data['channel'], date('Y-m-d'));
+
 		if (!is_dir($dir)) {
 			mkdir($dir);
 		}
-		$fp = !file_exists($path) ? fopen($path, 'x+') : fopen($path, 'a+');
 
-		if (!is_resource($fp)) {
-			return false;
-		}
+		$line = date('H:i:s') . " : {$data['user']} : {$data['message']}\n";
+		file_put_contents($path, $line, FILE_APPEND);
 
-		$log = date('H:i:s') . " : {$data['user']} : {$data['message']}\n";
-		fwrite($fp, $log);
-		fclose($fp);
 		return $data;
 	}
 
@@ -70,10 +77,7 @@ class Log extends \lithium\core\StaticObject {
 			}
 
 			return array_values(array_filter(scandir($path), function ($file) {
-				if ($file[0] == '.') {
-					return false;
-				}
-				return true;
+				return $file[0] != '.';
 			}));
 		}
 
@@ -86,6 +90,34 @@ class Log extends \lithium\core\StaticObject {
 				continue;
 			}
 			$results[] = $name;
+		}
+		return $results;
+	}
+
+	public static function search($regex, array $options = array()) {
+		$default = array('channel' => null);
+		$options += $default;
+
+		$path = static::path($options['channel']);
+
+		$dates = array_values(array_filter(scandir($path), function ($file) {
+			return $file[0] != '.';
+		}));
+		$results = array();
+
+		foreach ($dates as $date) {
+			$data = static::read($options['channel'], $date);
+
+			foreach ($data as $item) {
+				$match  = preg_match("#{$regex}#", $item['user']);
+				$match |= preg_match("#{$regex}#", $item['message']);
+
+				if (!$match) {
+					continue;
+				}
+				$item['date'] = $date;
+				$results[] = $item;
+			}
 		}
 		return $results;
 	}

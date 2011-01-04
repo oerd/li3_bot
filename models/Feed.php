@@ -8,8 +8,8 @@
 
 namespace li3_bot\models;
 
-use \lithium\util\String;
-use \lithium\util\Set;
+use lithium\util\String;
+use lithium\util\Collection;
 
 class Feed extends \lithium\core\StaticObject {
 
@@ -82,10 +82,11 @@ class Feed extends \lithium\core\StaticObject {
 		if (empty($data['channel']['item'])) {
 			return array();
 		}
-
 		$items = array();
 
 		foreach ($data['channel']['item'] as $item) {
+			$item = Collection::toArray($item);
+
 			$item['pubDate'] = strtotime($item['pubDate']);
 			if ($item['pubDate'] <= static::$_dates[$name] || count($items) >= $options['limit']) {
 				break;
@@ -108,12 +109,15 @@ class Feed extends \lithium\core\StaticObject {
 		$ments = array("", ": ", ": ");
 
 		foreach (array_reverse($items) as $item) {
+			if (strlen($item['title']) > 30) {
+				$item['title'] = substr($item['title'], 0, 20) . '…';
+			}
 			$description = null;
 
 			if (!empty($item['description'])) {
 				$description = str_replace($replace, $ments, strip_tags($item['description']));
 				if (strlen($description) > 50) {
-					$description = substr($description, 0, 50);
+					$description = substr($description, 0, 50) . '…';
 				}
 			}
 			$result[] = String::insert(static::$format, array(
@@ -132,8 +136,7 @@ class Feed extends \lithium\core\StaticObject {
 	*/
 	public static function read($url) {
 		$xml = @simplexml_load_file($url);
-		$xml = Set::to('array', $xml);
-		return $xml;
+		return Collection::toArray($xml);
 	}
 
 	public static function reset() {
@@ -141,4 +144,5 @@ class Feed extends \lithium\core\StaticObject {
 		static::$_firstPing = true;
 	}
 }
+
 ?>

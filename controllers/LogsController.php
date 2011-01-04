@@ -8,56 +8,58 @@
 
 namespace li3_bot\controllers;
 
-use \li3_bot\models\Log;
+use li3_bot\models\Log;
 use \lithium\g11n\Message;
 
 class LogsController extends \lithium\action\Controller {
 
-	public function index($channel = null) {
+	public function index() {
 		extract(Message::aliases());
 
 		$channels = Log::find('all');
-		$breadcrumbs[] = array(
-			'url' => array('plugin' => 'li3_bot', 'controller' => 'logs', 'action' => 'index'),
-			'title' => $t('Channels', array('scope' => 'li3_bot'))
-		);
 		$logs = null;
 
-		if ($channel) {
+		$breadcrumbs[] = array(
+			'title' => $t('Channels'),
+			'url' => array('library' => 'li3_bot', 'controller' => 'logs', 'action' => 'index')
+		);
+
+		if ($channel = $this->request->channel) { /* Here for BC */
 			$breadcrumbs[] = array(
-				'url' => null,
-				'title' => "#{$channel}"
+				'title' => "#{$channel}",
+				'url' => null
 			);
 			$logs = Log::find('all', compact('channel'));
 
 			natsort($logs);
 			$logs = array_reverse($logs);
 		}
-
 		return compact('channels', 'channel', 'logs', 'breadcrumbs');
 	}
 
-	public function view($channel, $date = null) {
+	public function view() {
 		extract(Message::aliases());
 
-		if (is_null($date)) {
-			return $this->index($channel);
-		}
+		$date = $this->request->date;
+		$channel = $this->request->channel;
+
+		$baseUrl = array('library' => 'li3_bot', 'controller' => 'logs');
 
 		$breadcrumbs[] = array(
-			'url' => array('plugin' => 'li3_bot', 'controller' => 'logs', 'action' => 'index'),
-			'title' => $t('Channels', array('scope' => 'li3_bot'))
+			'title' => $t('Channels'),
+			'url' => $baseUrl + array('action' => 'index')
 		);
 		$breadcrumbs[] = array(
-			'url' => array('plugin' => 'li3_bot', 'controller' => 'logs', 'action' => 'view', $channel),
-			'title' => "#{$channel}"
+			'title' => "#{$channel}",
+			'url' => $baseUrl + array('action' => 'index') + compact('channel')
 		);
 		$breadcrumbs[] = array(
-			'url' => null,
-			'title' => $date
+			'title' => $date,
+			'url' => null
 		);
 		$channels = Log::find('all');
 		$log = Log::read($channel, $date);
+
 		$previous = date('Y-m-d', strtotime($date) - (60 * 60 * 24));
 		$next = date('Y-m-d', strtotime($date) + (60 * 60 * 24));
 
@@ -67,8 +69,17 @@ class LogsController extends \lithium\action\Controller {
 		if (!Log::exists($channel, $next)) {
 			$next = null;
 		}
-
 		return compact('channels', 'channel', 'log', 'date', 'breadcrumbs', 'previous', 'next');
+	}
+
+	public function search() {
+		$channel = $this->request->channel;
+		$query = $this->request->data['query'];
+
+		$log = Log::search($query, array(
+			'channel' => $this->request->channel
+		));
+		return compact('log', 'channel', 'query');
 	}
 }
 

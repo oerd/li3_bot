@@ -3,18 +3,20 @@
 use \lithium\net\http\Router;
 use \app\extensions\route\Locale;
 
-Router::connect(new Locale(array(
-	'template' => '/bot/view/{:args}',
-	'params' => array(
-		'library' => 'li3_bot', 'controller' => 'logs', 'action' => 'view'
-	)
-)));
-
-Router::connect(new Locale(array(
-	'template' => '/bot/{:args}',
-	'params' => array(
-		'library' => 'li3_bot', 'controller' => 'logs'
-	)
-)));
+Router::connect('/bot', array(
+	'library' => 'li3_bot', 'controller' => 'pages', 'action' => 'home'
+));
+Router::connect('/bot/logs/{:channel}', array(
+	'library' => 'li3_bot', 'controller' => 'logs', 'action' => 'index'
+));
+Router::connect('/bot/logs/{:channel}/{:date:[0-9]{4}-[0-9]{2}-[0-9]{2}}', array(
+	'library' => 'li3_bot', 'controller' => 'logs', 'action' => 'view'
+));
+Router::connect('/bot/logs/{:channel}/search', array(
+	'library' => 'li3_bot', 'controller' => 'logs', 'action' => 'search'
+));
+Router::connect('/bot/tells', array(
+	'library' => 'li3_bot', 'controller' => 'tells', 'action' => 'index'
+));
 
 ?>

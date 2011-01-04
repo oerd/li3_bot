@@ -1,4 +1,4 @@
-<?php $this->title("Logs for {$channel} on {$date}"); ?>
+<?php $this->title($t('Logs for {:channel} on {:date}', compact('channel', 'date'))); ?>
 <table class="messages" lang="en">
 <?php foreach ($log as $i => $line): ?>
 	<?php
@@ -11,8 +11,14 @@
 			$h($line['message'])
 		);
 	?>
- 	<tr>
-		<td class="time"><?=$line['time'];?></td>
+	<tr id="<?php echo $i ?>">
+		<td class="time">
+			<?=$this->html->link($line['time'], array(
+				'library' => 'li3_bot',
+				'controller' => 'logs', 'action' => 'view',
+				'#' => $i
+			) + compact('channel', 'date')); ?>
+		</td>
 		<td class="user" style="color: rgb(<?=implode(',' , $rgb)?>);"><?=$line['user']?></td>
 		<td class="message"><?php echo $message; ?></td>
 	</tr>
@@ -23,13 +29,13 @@
 	<?php if ($previous)
 		echo $this->html->link('&larr;', array(
 			'library' => 'li3_bot', 'controller' => 'logs', 'action' => 'view',
-			'args' => array($channel, $previous)
-		), array('class' => 'prev', 'escape' => false));
+			'date' => $previous,
+		) + compact('channel'), array('class' => 'prev', 'escape' => false));
 	?>
 	<?php if ($next)
 		echo $this->html->link('&rarr;', array(
 			'library' => 'li3_bot', 'controller' => 'logs', 'action' => 'view',
-			'args' => array($channel, $next)
-		), array('class' => 'next', 'escape' => false));
+			'date' => $next,
+		) + compact('channel'), array('class' => 'next', 'escape' => false));
 	?>
 </div>

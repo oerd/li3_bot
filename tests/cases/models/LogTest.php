@@ -8,15 +8,7 @@
 
 namespace li3_bot\tests\cases\models;
 
-class MockLog extends \li3_bot\models\Log {
-
-	public static function __init() {
-		static::$path = LITHIUM_APP_PATH . '/resources/tmp/tests/logs';
-		if (!is_dir(static::$path)) {
-			mkdir(static::$path, 0777, true);
-		}
-	}
-}
+use li3_bot\tests\mocks\models\MockLog;
 
 class LogTest extends \lithium\test\Unit {
 
@@ -31,7 +23,7 @@ class LogTest extends \lithium\test\Unit {
 	public function testSaveAndFind() {
 		$expected = true;
 		$result = MockLog::save(array(
-			'channel'=> '#li3', 'nick' => 'Li3Bot',
+			'channel'=> '#li3', 'nick' => 'li3_bot',
 			'user' => 'gwoo', 'message' => 'the log message'
 		));
 		$this->assertEqual($expected, $result);
@@ -46,6 +38,6 @@ class LogTest extends \lithium\test\Unit {
 
 		$this->assertTrue(is_dir(MockLog::$path . '/li3'));
 	}
-
 }
+
 ?>

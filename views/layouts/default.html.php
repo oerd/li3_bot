@@ -27,14 +27,11 @@ use \lithium\g11n\Locale;
 			<h1><?= $t('Lithium Bot', array('scope' => 'li3_bot')); ?></h1>
 			<ul class="crumbs">
 			<?php foreach ($breadcrumbs as $crumb): ?>
-				<?php if ($crumb['url']): ?>
-					<li><?=$this->html->link($crumb['title'], $crumb['url']); ?></li>
-				<?php else: ?>
-					<li><?=$crumb['title']; ?></li>
-				<?php endif; ?>
+				<?php foreach ($breadcrumbs as $crumb): ?>
+					  <li><?php echo $crumb['url'] ? $this->html->link($crumb['title'], $crumb['url']) : $crumb['title']; ?></li>
+				<?php endforeach; ?>
 			<?php endforeach; ?>
 			</ul>
-		</div>
 		<div id="content">
 			<?php echo $this->content; ?>
 		</div>

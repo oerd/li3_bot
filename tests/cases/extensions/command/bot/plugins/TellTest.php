@@ -8,22 +8,10 @@
 
 namespace li3_bot\tests\cases\extensions\command\bot\plugins;
 
-use \lithium\console\Request;
-use \lithium\console\Response;
-
-class MockTellModel extends \li3_bot\models\Tell {
-
-	public static function __init() {
-		static::$path = LITHIUM_APP_PATH . '/resources/tmp/tests/test_tells.ini';
-	}
-}
-
-class MockTell extends \li3_bot\extensions\command\bot\plugins\Tell {
-
-	protected $_classes = array(
-		'model' => '\li3_bot\tests\cases\extensions\command\bot\plugins\MockTellModel'
-	);
-}
+use lithium\console\Request;
+use lithium\console\Response;
+use li3_bot\tests\mocks\models\MockTell as MockTellModel;
+use li3_bot\tests\mocks\extensions\command\bot\plugins\MockTell;
 
 class TellTest extends \lithium\test\Unit {
 
@@ -48,61 +36,47 @@ class TellTest extends \lithium\test\Unit {
 	}
 
 	public function testProcess() {
-		$expected = 'gwoo, I do not know about cool';
+		$expected = 'gwoo, I will remember lithium.';
 		$result = $this->tell->process(array(
-		 	'channel' => '#li3', 'nick'=> 'Li3Bot',
-		 	'user' => 'gwoo', 'message' => '~cool'
+		 	'channel' => '#li3', 'nick'=> 'li3_bot',
+		 	'user' => 'gwoo', 'message' => 'li3_bot: lithium is cool'
 		));
 		$this->assertEqual($expected, $result);
 
-		$expected = 'gwoo, I will remember lithium';
+		$expected = 'gwoo, lithium is cool.';
 		$result = $this->tell->process(array(
-		 	'channel' => '#li3', 'nick'=> 'Li3Bot',
-		 	'user' => 'gwoo', 'message' => 'Li3Bot: lithium is cool'
-		));
-		$this->assertEqual($expected, $result);
-
-		$expected = 'gwoo, lithium is cool';
-		$result = $this->tell->process(array(
-		 	'channel' => '#li3', 'nick'=> 'Li3Bot',
+		 	'channel' => '#li3', 'nick'=> 'li3_bot',
 		 	'user' => 'gwoo', 'message' => '~lithium'
 		));
 		$this->assertEqual($expected, $result);
 
-		$expected = 'bob, lithium is cool';
+		$expected = 'bob, lithium is cool.';
 		$result = $this->tell->process(array(
-		 	'channel' => '#li3', 'nick'=> 'Li3Bot',
+		 	'channel' => '#li3', 'nick'=> 'li3_bot',
 		 	'user' => 'gwoo', 'message' => '~tell bob about lithium'
-		));
-		$this->assertEqual($expected, $result);
-
-		$expected = 'gwoo, I do not know about something';
-		$result = $this->tell->process(array(
-		 	'channel' => '#li3', 'nick'=> 'Li3Bot',
-		 	'user' => 'gwoo', 'message' => '~tell bob about something'
 		));
 		$this->assertEqual($expected, $result);
 	}
 
 	public function testForget() {
 		MockTellModel::reset();
-		$expected = 'gwoo, I will remember lithium';
+		$expected = 'gwoo, I will remember lithium.';
 		$result = $this->tell->process(array(
-		 	'channel' => '#li3', 'nick'=> 'Li3Bot',
-		 	'user' => 'gwoo', 'message' => 'Li3Bot: lithium is cool'
+		 	'channel' => '#li3', 'nick'=> 'li3_bot',
+		 	'user' => 'gwoo', 'message' => 'li3_bot: lithium is cool'
 		));
 		$this->assertEqual($expected, $result);
 
-		$expected = 'gwoo, I forgot about lithium';
+		$expected = 'gwoo, I forgot about lithium.';
 		$result = $this->tell->process(array(
-		 	'channel' => '#li3', 'nick'=> 'Li3Bot',
+		 	'channel' => '#li3', 'nick'=> 'li3_bot',
 		 	'user' => 'gwoo', 'message' => '~forget lithium'
 		));
 		$this->assertEqual($expected, $result);
 
-		$expected = 'gwoo, I never knew about lithium';
+		$expected = 'gwoo, I never knew about lithium.';
 		$result = $this->tell->process(array(
-		 	'channel' => '#li3', 'nick'=> 'Li3Bot',
+		 	'channel' => '#li3', 'nick'=> 'li3_bot',
 		 	'user' => 'gwoo', 'message' => '~forget lithium'
 		));
 		$this->assertEqual($expected, $result);
