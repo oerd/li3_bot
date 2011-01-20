@@ -63,8 +63,8 @@ class Irc extends \lithium\console\Command {
 			$this->_connect();
 			$this->_plugins();
 		}
-		while($this->_running && !$this->socket->eof()) {
-			$this->_process();
+		while ($this->_running && !$this->socket->eof()) {
+			$this->_process(fgets($this->_resource));
 		}
 	}
 
@@ -72,7 +72,15 @@ class Irc extends \lithium\console\Command {
 		if ($method[0] === '_') {
 			$value = empty($params) ? $this->{$method} : $params[0];
 			$command = strtoupper(ltrim($method, '_')) . " {$value}\r\n";
+
 			return $this->socket->write($command);
+		}
+	}
+
+	protected function _privmsg($command) {
+		if ($this->socket->write("PRIVMSG {$command}\r\n")) {
+			$this->_process(":{$this->_nick}!@localhost PRIVMSG {$command}\r\n");
+			return true;
 		}
 	}
 
@@ -81,9 +89,7 @@ class Irc extends \lithium\console\Command {
 		$this->_user("{$this->_nick} {$this->_config['host']} Irc bot");
 	}
 
-	protected function _process() {
-		$line =	 fgets($this->_resource);
-
+	protected function _process($line) {
 		if (stripos($line, 'PING') !== false) {
 			list($ping, $pong) = $this->_parse(':', $line, 2);
 			$this->_pong($pong);
@@ -93,8 +99,7 @@ class Irc extends \lithium\console\Command {
 			}
 			return true;
 		}
-
-		if ($line{0} === ':') {
+		if ($line[0] === ':') {
 			$params = $this->_parse("(\s|(?<=\s):|^:)", $line, 5);
 
 			if (isset($params[2])) {
@@ -166,8 +171,10 @@ class Irc extends \lithium\console\Command {
 			return;
 		}
 		foreach ((array) $channels as $channel) {
-			$this->out('Sending ' . count($responses) . ' messages to ' . $channel);
+			$this->out('Sending ' . count($responses) . " message(s) to channel `{$channel}`:");
+
 			foreach ((array) $responses as $response) {
+				$this->out($response);
 				$this->_privmsg("{$channel} :{$response}");
 			}
 		}

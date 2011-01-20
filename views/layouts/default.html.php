@@ -25,13 +25,14 @@ use \lithium\g11n\Locale;
 	<div id="container">
 		<div id="header">
 			<h1><?= $t('Lithium Bot', array('scope' => 'li3_bot')); ?></h1>
+			<?php if (isset($breadcrumbs)): ?>
 			<ul class="crumbs">
 			<?php foreach ($breadcrumbs as $crumb): ?>
-				<?php foreach ($breadcrumbs as $crumb): ?>
-					  <li><?php echo $crumb['url'] ? $this->html->link($crumb['title'], $crumb['url']) : $crumb['title']; ?></li>
-				<?php endforeach; ?>
+				  <li><?php echo $crumb['url'] ? $this->html->link($crumb['title'], $crumb['url']) : $crumb['title']; ?></li>
 			<?php endforeach; ?>
 			</ul>
+			<?php endif; ?>
+		</div>
 		<div id="content">
 			<?php echo $this->content; ?>
 		</div>
