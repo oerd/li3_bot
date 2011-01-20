@@ -9,7 +9,7 @@
 	<?php endforeach;?>
 </ul>
 <?php else: ?>
-<?php $this->title($t{'Logs for {:channel}', compact('channel')}); ?>
+<?php $this->title($t('Logs for {:channel}', compact('channel'))); ?>
 <?=$this->form->create(null, array(
 	'url' => "/bot/logs/search/{$channel}",
 	'class' => 'search',
