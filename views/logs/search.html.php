@@ -1,4 +1,4 @@
-<?php $this->title("Search results for {$channel} logs"); ?>
+<?php $this->title($t('Search results for {:channel} logs', compact('channel'))); ?>
 
 <?=$this->form->create(null, array(
 	'url' => "/bot/logs/search/{$channel}",

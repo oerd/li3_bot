@@ -1,5 +1,5 @@
 <div class="logs">
-	<h3>Channel Logs</h3>
+	<h3><?=$t('Channel Logs'); ?></h3>
 	<?php if ($channels): ?>
 		<ul class="channels">
 			<?php foreach ((array) $channels as $channel): ?>
@@ -10,12 +10,12 @@
 			<?php endforeach; ?>
 		</ul>
 	<?php else: ?>
-		No channel logs have yet been created.
+		<?=$t('No channel logs have yet been created.'); ?>
 	<?php endif; ?>
 </div>
 
 <div class="tells">
-	<h3>Most Recent Tells</h3>
+	<h3><?=$t('Most Recent Tells'); ?></h3>
 	<?php if ($tells): ?>
 		<dl class="tells">
 		<?php foreach ($tells as $key => $value): ?>
@@ -27,17 +27,17 @@
 			'controller' => 'tells', 'action' => 'index'
 		)); ?>
 	<?php else: ?>
-		No tells, yet.
+		<?=$t('No tells, yet.'); ?>
 	<?php endif; ?>
 </div>
 
 <div class="karmas">
-	<h3>Karma Highscore</h3>
+	<h3><?=$t('Karma Highscore'); ?></h3>
 	<?php if ($karmas): ?>
 		<table class="karma">
 			<tr>
-				<th>score</th>
-				<th>nick</th>
+				<th><?=$t('score'); ?></th>
+				<th><?=$t('nick'); ?></th>
 			</tr>
 		<?php foreach ($karmas as $key => $value): ?>
 			<tr>
@@ -47,7 +47,7 @@
 		<?php endforeach; ?>
 		</table>
 	<?php else: ?>
-		No karma data.
+		<?=$t('No karma data.'); ?>
 	<?php endif; ?>
 </div>
 
@@ -59,6 +59,6 @@
 				$plugin = end($plugin);
 			?>
 		<?php endforeach; ?>
-		This bot is running with plugins <?php echo implode(', ', $plugins); ?>.
+		<?=$t('This bot is running with plugins {:plugins}', array('plugins' => implode(', ', $plugins))) ?>.
 	<?php endif; ?>
 </div>
