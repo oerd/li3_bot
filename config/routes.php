@@ -1,7 +1,8 @@
 <?php
 
-use \lithium\net\http\Router;
-use \app\extensions\route\Locale;
+use lithium\net\http\Router;
+use app\extensions\route\Locale;
+use lithium\action\Response;
 
 Router::connect(new Locale(array(
 	'template' => '/bot',
@@ -33,5 +34,25 @@ Router::connect(new Locale(array(
 	'params' => array(
 		'library' => 'li3_bot', 'controller' => 'tells', 'action' => 'index'
 ))));
+
+/* BC, redirect old to new routes. */
+
+Router::connect(new Locale(array(
+	'template' => '/bot/view/{:args}',
+	'handler' => function($request) {
+		$location = array('library' => 'li3_bot', 'controller' => 'logs');
+
+		if (count($request->args) == 2) {
+			$location['action'] = 'view';
+			list($location['channel'], $location['date']) = $request->args;
+		} elseif (count($request->args == 1)) {
+			$location['action'] = 'index';
+			$location['channel'] = $request->args[0];
+		} else {
+			return false;
+		}
+		return new Response(compact('location'));
+	}
+)));
 
 ?>
