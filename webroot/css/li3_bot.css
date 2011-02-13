@@ -12,6 +12,10 @@
 #content {
 	margin-top: 2em;
 }
+ul.channels {
+	margin-left: 26px;
+	list-style: url("http://lithify.me/img/icons/silk/comments.png");
+}
 table.messages {
 	width: 100%;
 }
